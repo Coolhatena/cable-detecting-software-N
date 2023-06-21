@@ -28,6 +28,8 @@ w, h = src.shape[1::-1]
 hsv = cv.cvtColor(src, cv.COLOR_BGR2HSV)
 ###################################
 
+
+
 global roi_x_axis, roi_y_axis
 
 config_file = open('config.txt', 'rt')
@@ -60,7 +62,6 @@ section3 = (20,210)
 visual_sugar = -5
 
 sectionGroup = [section1, section2, section3]
-
 
 def play_sound(ok):
   
@@ -109,54 +110,77 @@ def generateROI(img, positions, positionsCheck):
 	
 	return img
 
+def assertPartNumber(window, testType, message):
+	global sectionPositionsGroup
+	global isPartNumber
+	global messageState
+
+	sectionPositionsGroup = testType
+	isPartNumber = True
+	messageState = message
+	window.destroy()
+
+
+
+
 
 def getBarcode(window, text):
 	global sectionPositionsGroup
-	global isBarcode 
+	global isPartNumber
+	global isTest
 	key = text
 	print(f'repr: {repr(key)}')
 	key = key.replace("'", "")
 	print(key)
 
-	if key == "0033105010":
-		sectionPositionsGroup = testTypes.test_003_31050_10
-		isBarcode = True
-		window.destroy()
+	key_header = key[0:3]
+	if key_header == "003":
+		if key == "0033105010":
+			assertPartNumber(window, testTypes.test_003_31050_10, "ID/Numero de parte")
 
-	if key == "0033104910":
-		sectionPositionsGroup = testTypes.test_003_31049_10
-		isBarcode = True
-		window.destroy()
+		if key == "0033104910":
+			assertPartNumber(window, testTypes.test_003_31049_10, "ID/Numero de parte")
 
-	if key == "0033104900":
-		sectionPositionsGroup = testTypes.test_003_31049_00
-		isBarcode = True
-		window.destroy()
+		if key == "0033104900":
+			assertPartNumber(window, testTypes.test_003_31049_00, "ID/Numero de parte")
 
-	if key == "0033104810":
-		sectionPositionsGroup = testTypes.test_003_31048_10
-		isBarcode = True
-		window.destroy()
+		if key == "0033104810":
+			assertPartNumber(window, testTypes.test_003_31048_10, "ID/Numero de parte")
 
-	if key == "0033046610":
-		sectionPositionsGroup = testTypes.test_003_30466_10
-		isBarcode = True
-		window.destroy()
+		if key == "0033046610":
+			assertPartNumber(window, testTypes.test_003_30466_10, "ID/Numero de parte")
 
+		if not isPartNumber:
+			window.destroy()
+	else:
+		print( sectionPositionsGroup is not None )
+		if sectionPositionsGroup is not None:
+			isTest = True
+			window.destroy()
+		else:
+			window.destroy()
+
+
+#The positions of the ROIS
+global sectionPositionsGroup 
+sectionPositionsGroup = None
+
+# Flag to check if the received parameter its actually a valid barcode
+global isTest 
+isTest = False
+
+# Flag to check if a part number exist
+global isPartNumber
+isPartNumber = False
 
 # Counter to move between detection sections
 sectionCounter = 0
 
-#The positions of the ROIS
-global sectionPositionsGroup
-
-# Flag to check if the received parameter its actually a valid barcode
-global isBarcode 
-isBarcode = False
-
 # Flag used to mark failed sections on green
 isError = False
 
+# State for the scanning message
+messageState = "numero de parte"
 
 while True:
 	
@@ -166,7 +190,7 @@ while True:
 		master.title("Codigo de barras")
 		master.geometry("500x100")
 		
-		label = Label(master,text ="Escanee el codigo de barras")
+		label = Label(master,text =f"Escanee el {messageState}")
 		label.pack(pady = 10)
 		label.config(font=('Helvetica bold', 25))
 
@@ -177,7 +201,7 @@ while True:
 
 		master.mainloop()
 
-		if isBarcode:
+		if isTest:
 			break
 
 
