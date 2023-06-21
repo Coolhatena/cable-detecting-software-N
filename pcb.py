@@ -90,9 +90,7 @@ def generateMsk(hsv, colors):
 def generateROI(img, positions, positionsCheck):
 	#for position in positions:
 	global roi_x_axis, roi_y_axis
-	print("GENERATE ROI")
-	print(positions)
-	print(positionsCheck)
+
 	for i in range(0, len(positions)):
 		position = positions[i]
 		roi_color = (255, 0, 0)
