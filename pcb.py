@@ -110,7 +110,6 @@ def generateROI(img, positions, positionsCheck):
 		position_1 = (position[0][0] + roi_x_axis, position[0][1] + roi_y_axis)
 		position_2 = (position[1][0] + roi_x_axis, position[1][1] + roi_y_axis)
 		img = cv.rectangle(img, position_1, position_2, roi_color, FIGURES_THICKNESS, cv.LINE_4)
-		print(isFail)
 		if isFail:
 			img = cv.putText(img, 'Error', (position_2[0] + 5, position_2[1] - 10), cv.FONT_HERSHEY_SIMPLEX, 0.5, roi_color, FIGURES_THICKNESS)
 	
@@ -399,7 +398,7 @@ while True:
 		print(f'ROI passed: {ROI_passed_check}')
 		last_section = roi_logical_section
 
-		if  functools.reduce(lambda a, b: a+b, passClassArray) >= roiPLength: #  or True
+		if  functools.reduce(lambda a, b: a+b, passClassArray) >= roiPLength: # or True
 			ROI_BOX_CLR = (0,255,0)
 			ROI_BOX_CLR1 = (0,255,0)
 			ROI_BOX_CLR2 = (0,255,0)
