@@ -90,9 +90,13 @@ def generateMsk(hsv, colors):
 def generateROI(img, positions, positionsCheck):
 	#for position in positions:
 	global roi_x_axis, roi_y_axis
+	print("GENERATE ROI")
+	print(positions)
+	print(positionsCheck)
 	for i in range(0, len(positions)):
 		position = positions[i]
 		roi_color = (255, 0, 0)
+		isFail = False
 
 		if len(positionsCheck) > 0:
 			if positionsCheck[i] == 1:
@@ -100,6 +104,7 @@ def generateROI(img, positions, positionsCheck):
 
 			if positionsCheck[i] == -1:
 				roi_color = (0, 0, 255)
+				isFail = True
 
 			if positionsCheck[i] == 0:
 				roi_color = (255, 0, 0)
@@ -107,6 +112,9 @@ def generateROI(img, positions, positionsCheck):
 		position_1 = (position[0][0] + roi_x_axis, position[0][1] + roi_y_axis)
 		position_2 = (position[1][0] + roi_x_axis, position[1][1] + roi_y_axis)
 		img = cv.rectangle(img, position_1, position_2, roi_color, FIGURES_THICKNESS, cv.LINE_4)
+		print(isFail)
+		if isFail:
+			img = cv.putText(img, 'Error', (position_2[0] + 5, position_2[1] - 10), cv.FONT_HERSHEY_SIMPLEX, 0.5, roi_color, FIGURES_THICKNESS)
 	
 	return img
 
@@ -244,7 +252,7 @@ while True:
 
 			if isError:
 				side_color = (0, 0, 255)
-				(sectionValues[1], sectionHeight[1]/2)
+				# (sectionValues[1], sectionHeight[1]/2)
 				sideImage = cv.putText(sideImage, 'FAIL', (int(sectionValues[0]/2) + 18, 120), cv.FONT_HERSHEY_SIMPLEX, 1, side_color, FIGURES_THICKNESS)
 
 			sideImage = cv.rectangle(sideImage, (int(sectionValues[1] /2),20), (int((sectionValues[0] - visual_sugar)/2),200), side_color, FIGURES_THICKNESS, cv.LINE_4)
