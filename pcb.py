@@ -440,5 +440,6 @@ while True:
 				sideImage = cv.rectangle(sideImage, (int(section_passed[1]/2),20), (int((section_passed[0] - visual_sugar)/2),200), (0, 200, 0), FIGURES_THICKNESS, cv.LINE_4)
 			cv.imshow('Preview', sideImage)
 			cv.waitKey(1)
+			isTest = False
 			break
 		############# LOOP END ##############
